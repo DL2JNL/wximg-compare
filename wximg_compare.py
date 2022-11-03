@@ -141,9 +141,5 @@ else:
     simpleOutput(database['similarity'].idxmax())
 
 # plot the histogram of the input image and the match
-<<<<<<< HEAD
-#plothist(image, doubleplot=True, file2=cv.imread(databasePath + database.filename[maxSimilarID]))
-=======
 if (printHistogram):
     plothist(image, doubleplot=True, file2=cv.imread(databasePath + database.filename[database['similarity'].idxmax()]))
->>>>>>> outputModes
