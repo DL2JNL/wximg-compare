@@ -1,17 +1,16 @@
 #!/bin/bash
 
 #---CONFIG---
-WEBCAMURL='http://www.panorama-webcam.keepfree.de/upcam.jpg'
-DATABASEPATH='database/'
+INPUTFILE='/home/jan/wximg_compare/input/input.jpg'
+DATABASEPATH='/home/jan/wximg_compare/database/'
 DATABASEFILE='weathertags.csv'
 #------------
 
-
 datetime=$(date +%Y%m%d_%H%M)
 
-echo 'Downloading file...'
+echo 'Copying file...'
 
-wget $WEBCAMURL -O $DATABASEPATH$datetime.jpg -q
+cp -f $INPUTFILE $DATABASEPATH$datetime.jpg
 
 echo 'done.'
 echo ' '

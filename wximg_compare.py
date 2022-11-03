@@ -13,9 +13,9 @@ import numpy as np
 
 #---CONFIG---
 # path to input picture
-picturePath = 'input/input.jpg'
+picturePath = '/home/jan/wximg_compare/input/input.jpg'
 # path to database and name of the weathertag file
-databasePath = 'database/'
+databasePath = '/home/jan/wximg_compare/database/'
 databaseFile = 'weathertags.csv'
 # histogram compare method, see OpenCV documetation for details
 histogramCompareMethod = cv.HISTCMP_CORREL
@@ -117,4 +117,4 @@ print('misc :', misc.get(database.misc[maxSimilarID]))
 print(' ')
 
 # plot the histogram of the input image and the match
-plothist(image, doubleplot=True, file2=cv.imread(databasePath + database.filename[maxSimilarID]))
+#plothist(image, doubleplot=True, file2=cv.imread(databasePath + database.filename[maxSimilarID]))
