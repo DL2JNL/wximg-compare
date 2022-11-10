@@ -15,9 +15,11 @@ import numpy as np
 
 # OUTPUT OPTIONS
 # verbose (more detailed) [Ture] or simple [False] output?
-verboseOutput = True
+verboseOutput = False
+# single database-match output [False] or list output [True]?
+listOutput = True
 # plot histogram or not?
-printHistogram = True
+printHistogram = False
 
 # INPUT OPTIONS
 # path to input picture
@@ -134,11 +136,16 @@ def simpleOutput(maxSimilarID):
         print(', ', misc.get(database.misc[maxSimilarID]), end='')
     print('')
 
-# print out most similar database entry
-if (verboseOutput):
-    detailedOutput(database['similarity'].idxmax())
+# list output or singel-match output
+if (listOutput):
+    print(database.sort_values(by='similarity', ascending=False)[1:10])
 else:
-    simpleOutput(database['similarity'].idxmax())
+    # print out most similar database entry
+    if (verboseOutput):
+        detailedOutput(database['similarity'].idxmax())
+    else:
+        simpleOutput(database['similarity'].idxmax())
+
 
 # plot the histogram of the input image and the match
 if (printHistogram):
