@@ -53,11 +53,9 @@ clouds={
 
 percip={
     0: 'no percipitation',
-    1: 'light rain',
-    2: 'heavy rain',
-    3: 'light snowfall',
-    4: 'heavy snowfall',
-    5: 'hail'
+    1: 'rain',
+    2: 'snowfall',
+    3: 'hail'
 }
 
 misc={

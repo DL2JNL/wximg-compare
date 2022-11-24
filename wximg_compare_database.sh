@@ -32,11 +32,9 @@ read cloudcover
 echo ' '
 echo 'please select a percipitation option :'
 echo '0 - no percipitation'
-echo '1 - light rain'
-echo '2 - heavy rain'
-echo '3 - light snowfall'
-echo '4 - heavy snowfall'
-echo '5 - hail'
+echo '1 - rain'
+echo '2 - snowfall'
+echo '3 - hail'
 
 read percipitation
 
@@ -75,18 +73,12 @@ esac
 
 case $percipitation in
     1)
-        echo '-> light rain'
+        echo '-> rain'
         ;;
     2)
-        echo '-> heavy rain'
+        echo '-> snowfall'
         ;;
     3)
-        echo '-> light snowfall'
-        ;;
-    4)
-        echo '-> heavy snowfall'
-        ;;
-    5)
         echo '-> hail'
         ;;
 esac
