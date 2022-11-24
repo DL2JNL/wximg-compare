@@ -31,6 +31,8 @@ databaseFile = 'weathertags.csv'
 # OTHER SETTINGS
 # histogram compare method, see OpenCV documetation for details
 histogramCompareMethod = cv.HISTCMP_CORREL
+# number of database entries in the list output
+listNumber = 10
 
 #------------
 
@@ -134,9 +136,34 @@ def simpleOutput(maxSimilarID):
         print(', ', misc.get(database.misc[maxSimilarID]), end='')
     print('')
 
+def createListOutput(n, verbose = True):
+    maxSimilarList = database.sort_values(by='similarity', ascending=False)[0:n]
+    cloudCount = [0]*6
+    percipCount = [0]*4
+    miscCount = [0]*4
+    if (verbose):
+        print(maxSimilarList)
+    else:
+        
+        for c in range(0,6):
+            cloudCount[c] = maxSimilarList.clouds[maxSimilarList.clouds==c].count()
+        for p in range(0,4):
+            percipCount[p] = maxSimilarList.percip[maxSimilarList.percip==p].count()
+        for m in range(0,4):
+            miscCount[m] = maxSimilarList.misc[maxSimilarList.misc==m].count()
+        print(clouds.get(cloudCount.index(max(cloudCount))), end='')
+        if (percipCount.index(max(percipCount))!=0):
+            print(', ', percip.get(percipCount.index(max(percipCount))), end='')
+        if (miscCount.index(max(miscCount))!=0):
+            print(', ', misc.get(miscCount.index(max(miscCount))), end='')
+        print('')
+
 # list output or singel-match output
 if (listOutput):
-    print(database.sort_values(by='similarity', ascending=False)[1:10])
+    if (verboseOutput):
+        createListOutput(listNumber, verbose=True)
+    else:
+        createListOutput(listNumber, verbose=False)
 else:
     # print out most similar database entry
     if (verboseOutput):
