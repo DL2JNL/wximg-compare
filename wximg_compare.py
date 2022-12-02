@@ -15,7 +15,7 @@ import numpy as np
 
 # OUTPUT OPTIONS
 # verbose (more detailed) [Ture] or simple [False] output?
-verboseOutput = False
+verboseOutput = True
 # single database-match output [False] or list output [True]?
 listOutput = True
 # plot histogram or not?
@@ -31,8 +31,8 @@ databaseFile = 'weathertags.csv'
 # OTHER SETTINGS
 # histogram compare method, see OpenCV documetation for details
 histogramCompareMethod = cv.HISTCMP_CORREL
-# number of database entries in the list output
-listNumber = 10
+# verbose output : number of most-similar database entries to display in the output ; non-verbose output : number of most-similar database entries to use for determination of the weather-tags
+outputNumber = 10
 
 #------------
 
@@ -93,51 +93,8 @@ def compareimage(file1, file2):
     similarity = [similarityB, similarityG, similarityR]
     return similarity
 
-# plots the histograms for a given image-object (file1), optionally plots a second histogram for the image-object in file2 if doubleplot=True
-def plothist(file1, doubleplot=False, file2=None):
-    
-    hist1 = histogram(file1)
-    
-    plt.plot(hist1[0], color='blue')
-    plt.plot(hist1[1], color='green')
-    plt.plot(hist1[2], color='red')
-    
-    if(doubleplot==True):
-        
-        hist2 = histogram(file2)
-        
-        plt.plot(hist2[0], color='blue')
-        plt.plot(hist2[1], color='green')
-        plt.plot(hist2[2], color='red')
-        
-    plt.xlim([0,256])
-    plt.show()
-
-# compares the input image to all images in the database and adds the similarity value to the dataframe
-for i, picture in enumerate(database.filename):
-    compareimg = cv.imread(databasePath + picture)
-    database.at[i,'similarity'] = np.mean(compareimage(image, compareimg))
-
-# detailed output of most similar database entry
-def detailedOutput(maxSimilarID):
-    print('found database match :', database.filename[maxSimilarID], 'with similarity', database.similarity[maxSimilarID])
-    print(' ')
-    print('cloud-cover :', clouds.get(database.clouds[maxSimilarID]))
-    print('percipitation :', percip.get(database.percip[maxSimilarID]))
-    print('misc :', misc.get(database.misc[maxSimilarID]))
-    print(' ')
-    
-# simple output of most similar database entry
-def simpleOutput(maxSimilarID):
-    print(clouds.get(database.clouds[maxSimilarID]), end='')
-    if (database.percip[maxSimilarID]!=0):
-        print(', ', percip.get(database.percip[maxSimilarID]), end='')
-    if (database.misc[maxSimilarID]!=0):
-        print(', ', misc.get(database.misc[maxSimilarID]), end='')
-    print('')
-
-def createListOutput(n, verbose = True):
-    maxSimilarList = database.sort_values(by='similarity', ascending=False)[0:n]
+# prints list output (verbose=True) or simple output (verbose=false)
+def createOutput(verbose = True):
     cloudCount = [0]*6
     percipCount = [0]*4
     miscCount = [0]*4
@@ -158,20 +115,31 @@ def createListOutput(n, verbose = True):
             print(', ', misc.get(miscCount.index(max(miscCount))), end='')
         print('')
 
+# plots the histograms for a given image-object (file)
+def plothist(file):
+    
+    hist = histogram(file)
+    
+    plt.plot(hist[0], color='blue')
+    plt.plot(hist[1], color='green')
+    plt.plot(hist[2], color='red')
+        
+    plt.xlim([0,256])
+    plt.show()
+
+# compares the input image to all images in the database and adds the similarity value to the dataframe
+for i, picture in enumerate(database.filename):
+    compareimg = cv.imread(databasePath + picture)
+    database.at[i,'similarity'] = np.mean(compareimage(image, compareimg))
+# create List of [outputNumber] most-similar database-enteries
+maxSimilarList = database.sort_values(by='similarity', ascending=False)[0:outputNumber]
+
 # list output or singel-match output
-if (listOutput):
-    if (verboseOutput):
-        createListOutput(listNumber, verbose=True)
-    else:
-        createListOutput(listNumber, verbose=False)
+if (verboseOutput):
+    createOutput(verbose=True)
 else:
-    # print out most similar database entry
-    if (verboseOutput):
-        detailedOutput(database['similarity'].idxmax())
-    else:
-        simpleOutput(database['similarity'].idxmax())
+    createOutput(verbose=False)
 
-
-# plot the histogram of the input image and the match
+# plot the histogram of the input image
 if (printHistogram):
-    plothist(image, doubleplot=True, file2=cv.imread(databasePath + database.filename[database['similarity'].idxmax()]))
+    plothist(image)
